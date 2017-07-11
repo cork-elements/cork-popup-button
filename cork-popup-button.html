@@ -1,0 +1,144 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+
+<dom-module id="cork-popup-button">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+      }
+
+      button {
+        cursor: pointer;
+        font-size: var(--cork-font-size, 16px);
+        width: 100%;
+        text-align: left;
+        border-radius: 0;
+        background: var(--cork-background-color, var(--default-background-color, transparent));
+        color: var(--cork-color, var(--default-text-color, #888));
+        border: var(--cork-border, 2px solid #888);
+        display: flex;
+        align-items: center;
+      }
+      button[open] {
+        background: var(--cork-background-color-open, #eee);
+      }
+
+      #anchor {
+        position: relative;
+      }
+
+      img {
+        z-index: 1001;
+        position: absolute;
+        left: 5px;
+        top: -15px;
+      }
+
+      #popup {
+        z-index: 1000;
+        background-color: var(--cork-popup-background-color, var(--primary-background-color, #fff));
+        box-shadow: 0 0 10px #888;
+        position: absolute;
+        top: 15px;
+        left: 0;
+        width: var(--cork-popup-width);
+        min-width: 290px;
+      }
+
+      [hidden] {
+        display: none;
+      }
+    </style>
+
+    <button id="btn" on-click="_onClick" open$="[[open]]">
+      <span style="flex:1">[[label]]</span>
+      <iron-icon icon="arrow-drop-down"></iron-icon>
+    </button>
+
+    <div id="anchor" hidden$="[[!open]]" on-click="_prevent">
+      <img id="triangle" src="/images/triangle.png" />
+      <div id="popup">
+        <slot></slot>
+      </div>
+    </div>
+
+  </template>
+
+  <script>
+    /**
+     * `cork-popup-button`
+     * Select button with generic popup that can be a menu or something more complex
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class CorkPopupButton extends Polymer.Element {
+      static get is() { return 'cork-popup-button'; }
+      static get properties() {
+        return {
+          label: {
+            type: String,
+            value: 'Select'
+          },
+          open: {
+            type: Boolean,
+            value: false
+          }
+        };
+      }
+
+      constructor() {
+        super();
+        this.hide = this.hide.bind(this);
+        this._resetTriangle = this._resetTriangle.bind(this);
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        window.addEventListener('click', this.hide);
+        window.addEventListener('resize', this.hide);
+      }
+
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        window.removeEventListener('click', this.hide);
+        window.removeEventListener('resize', this.hide);
+      }
+
+      toggle() {
+        this.open = !this.open;
+        this._resetTriangle();
+      }
+
+      _onClick(e) {
+        this._prevent(e);
+        this.toggle();
+      }
+
+      _prevent(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      hide() {
+        this.open = false;
+      }
+
+      _resetTriangle() {
+        if( !this.open ) return;
+
+        var l = this.$.btn.offsetWidth - 44;
+        var max = this.$.popup.offsetWidth - 50;
+        if( l > max ) l = max;
+
+        this.$.triangle.style.left = l+'px';
+      }
+
+    }
+
+    window.customElements.define(CorkPopupButton.is, CorkPopupButton);
+  </script>
+</dom-module>
