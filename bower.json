@@ -4,7 +4,8 @@
   "main": "cork-popup-button.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
-    "iron-icons": "^2.0.1"
+    "iron-icons": "^2.0.1",
+    "cork-icons": "cork-elements/cork-icons"
   },
   "devDependencies": {
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",

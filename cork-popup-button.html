@@ -1,6 +1,7 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../cork-icons/cork-icons.html">
 
 <dom-module id="cork-popup-button">
   <template>
@@ -29,19 +30,19 @@
         position: relative;
       }
 
-      img {
+      #triangle {
         z-index: 1001;
         position: absolute;
         left: 5px;
-        top: -15px;
+        top: -22px;
       }
 
       #popup {
         z-index: 1000;
         background-color: var(--cork-popup-background-color, var(--primary-background-color, #fff));
-        box-shadow: 0 0 10px #888;
+        box-shadow: 0 0 8px #666;
         position: absolute;
-        top: 15px;
+        top: 10px;
         left: 0;
         width: var(--cork-popup-width);
         min-width: 290px;
@@ -58,7 +59,8 @@
     </button>
 
     <div id="anchor" hidden$="[[!open]]" on-click="_prevent">
-      <img id="triangle" src="/images/triangle.png" />
+      <iron-icon icon="cork:up-arrow" id="triangle" style="--iron-icon-height: 32px;
+    --iron-icon-width: 32px;"></iron-icon>
       <div id="popup">
         <slot></slot>
       </div>
@@ -130,7 +132,7 @@
       _resetTriangle() {
         if( !this.open ) return;
 
-        var l = this.$.btn.offsetWidth - 44;
+        var l = this.$.btn.offsetWidth - 36;
         var max = this.$.popup.offsetWidth - 50;
         if( l > max ) l = max;
 
