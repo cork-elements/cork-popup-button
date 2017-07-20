@@ -106,14 +106,12 @@
 
       connectedCallback() {
         super.connectedCallback();
-        window.addEventListener('cork-popup-button-click', this.hide);
         window.addEventListener('click', this.hide);
         window.addEventListener('resize', this.hide);
       }
 
       disconnectedCallback() {
         super.disconnectedCallback();
-        window.addEventListener('cork-popup-button-click', this.hide);
         window.removeEventListener('click', this.hide);
         window.removeEventListener('resize', this.hide);
       }
@@ -137,7 +135,7 @@
             src: this
           }
         }
-        window.dispatchEvent(new CustomEvent('cork-popup-button-click', payload));
+        window.dispatchEvent(new CustomEvent('click', payload));
       }
 
       hide(e) {
