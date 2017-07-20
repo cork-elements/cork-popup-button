@@ -48,13 +48,19 @@
         min-width: 290px;
       }
 
+      #btnLabel {
+        flex: 1;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
       [hidden] {
         display: none;
       }
     </style>
 
     <button id="btn" on-click="_onClick" open$="[[open]]">
-      <span style="flex:1">[[label]]</span>
+      <span id="btnLabel">[[label]]</span>
       <iron-icon icon="arrow-drop-down"></iron-icon>
     </button>
 
