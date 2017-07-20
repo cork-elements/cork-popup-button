@@ -101,17 +101,19 @@
       constructor() {
         super();
         this.hide = this.hide.bind(this);
-        this._resetTriangle = this._resetTriangle.bind(this);
+        this._resetTriangle = this._resetTriangle.bind(this); 
       }
 
       connectedCallback() {
         super.connectedCallback();
+        window.addEventListener('cork-popup-button-click', this.hide);
         window.addEventListener('click', this.hide);
         window.addEventListener('resize', this.hide);
       }
 
       disconnectedCallback() {
         super.disconnectedCallback();
+        window.addEventListener('cork-popup-button-click', this.hide);
         window.removeEventListener('click', this.hide);
         window.removeEventListener('resize', this.hide);
       }
@@ -129,20 +131,50 @@
       _prevent(e) {
         e.preventDefault();
         e.stopPropagation();
+
+        var payload = {
+          detail: {
+            src: this
+          }
+        }
+        window.dispatchEvent(new CustomEvent('cork-popup-button-click', payload));
       }
 
-      hide() {
+      hide(e) {
+        if( e && e.detail && e.detail.src === this ) {
+          return;
+        }
+
         this.open = false;
       }
 
       _resetTriangle() {
         if( !this.open ) return;
 
-        var l = this.$.btn.offsetWidth - 36;
-        var max = this.$.popup.offsetWidth - 50;
-        if( l > max ) l = max;
+        var ww = window.innerWidth;
+        var pw = this.$.popup.offsetWidth;
+        var bl = this.$.btn.offsetLeft;
+        var bw = this.$.btn.offsetWidth;
 
-        this.$.triangle.style.left = l+'px';
+        if( ww <= 768 ) {
+          this.$.popup.style.left = ((-1 * bl) + 10) + 'px';
+          this.$.popup.style.right = (-1 * (ww - bl - bw - 20)) + 'px';
+        } else {
+          this.$.popup.style.left = 0;
+          this.$.popup.style.right = 'inherit';
+        }
+
+
+
+        setTimeout(() => {
+          pw = this.$.popup.offsetWidth;
+          var l = bw - 36;
+          var max = pw - 50;
+          if( l > max ) l = max;
+
+          this.$.triangle.style.left = l+'px';
+        }, 0);
+
       }
 
     }
