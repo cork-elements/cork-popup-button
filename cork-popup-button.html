@@ -102,6 +102,7 @@
         super();
         this.hide = this.hide.bind(this);
         this._resetTriangle = this._resetTriangle.bind(this);
+        
       }
 
       connectedCallback() {
@@ -151,8 +152,10 @@
 
         var ww = window.innerWidth;
         var pw = this.$.popup.offsetWidth;
-        var bl = this.$.btn.offsetLeft;
-        var bw = this.$.btn.offsetWidth;
+
+        var offset = this.getBoundingClientRect();
+        var bl = offset.left + (parseInt(this.style.paddingLeft) || 0);
+        var bw = offset.width;
 
         if( ww <= 768 ) {
           this.$.popup.style.left = (-1 * bl) + 'px';
