@@ -101,19 +101,19 @@
       constructor() {
         super();
         this.hide = this.hide.bind(this);
-        this._resetTriangle = this._resetTriangle.bind(this); 
+        this._resetTriangle = this._resetTriangle.bind(this);
       }
 
       connectedCallback() {
         super.connectedCallback();
         window.addEventListener('click', this.hide);
-        window.addEventListener('resize', this.hide);
+        window.addEventListener('resize', this._resetTriangle);
       }
 
       disconnectedCallback() {
         super.disconnectedCallback();
         window.removeEventListener('click', this.hide);
-        window.removeEventListener('resize', this.hide);
+        window.removeEventListener('resize', this._resetTriangle);
       }
 
       toggle() {
@@ -155,8 +155,8 @@
         var bw = this.$.btn.offsetWidth;
 
         if( ww <= 768 ) {
-          this.$.popup.style.left = ((-1 * bl) + 10) + 'px';
-          this.$.popup.style.right = (-1 * (ww - bl - bw - 20)) + 'px';
+          this.$.popup.style.left = (-1 * bl) + 'px';
+          this.$.popup.style.right = (-1 * (ww - bl - bw)) + 'px';
         } else {
           this.$.popup.style.left = 0;
           this.$.popup.style.right = 'inherit';
