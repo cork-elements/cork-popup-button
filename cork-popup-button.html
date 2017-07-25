@@ -25,6 +25,7 @@
       }
       button[open] {
         background: var(--cork-background-color-open, #eee);
+        color: var(--cork-color-open, #912046);
       }
 
       #anchor {
@@ -36,6 +37,9 @@
         position: absolute;
         left: 5px;
         top: -21px;
+
+        --iron-icon-height: 32px;
+        --iron-icon-width: 32px;
       }
 
       #popup {
@@ -55,6 +59,10 @@
         white-space: nowrap;
       }
 
+      iron-icon[icon="arrow-drop-down"] {
+        color: var(--cork-drop-down-arrow-color, #912046);
+      }
+
       [hidden] {
         display: none;
       }
@@ -66,8 +74,7 @@
     </button>
 
     <div id="anchor" hidden$="[[!open]]" on-click="_prevent">
-      <iron-icon icon="cork:up-arrow" id="triangle" style="--iron-icon-height: 32px;
-    --iron-icon-width: 32px;"></iron-icon>
+      <iron-icon icon="cork:up-arrow" id="triangle"></iron-icon>
       <div id="popup">
         <slot></slot>
       </div>
