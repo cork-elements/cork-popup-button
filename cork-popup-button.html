@@ -69,6 +69,7 @@
     </style>
 
     <button id="btn" on-click="_onClick" open$="[[open]]">
+      <iron-icon hidden$="[[!icon]]" icon="[[icon]]"></iron-icon>
       <span id="btnLabel">[[label]]</span>
       <iron-icon icon="arrow-drop-down"></iron-icon>
     </button>
@@ -98,6 +99,10 @@
           label: {
             type: String,
             value: 'Select'
+          },
+          icon: {
+            type : String,
+            value : ''
           },
           open: {
             type: Boolean,
