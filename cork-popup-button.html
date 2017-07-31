@@ -160,7 +160,7 @@
         this.open = false;
       }
 
-      _resetTriangle() {
+      _resetTriangle(noRetry) {
         if( !this.open ) return;
 
         var ww = window.innerWidth;
@@ -174,22 +174,22 @@
         if( ww <= 768 ) {
           this.$.popup.style.left = (-1 * bl) + 'px';
           this.$.popup.style.right = (-1 * (ww - bl - bw)) + 'px';
-        } else if( bl + pw > ww + 20 ) {
-          this.$.popup.style.left = (bl + bw - ww - 20)+'px';
+        } else if( bl + pw > ww + 35 ) {
+          this.$.popup.style.left = (bl + bw - ww - 35)+'px';
           this.$.popup.style.right = 'inherit';
         } else {
           this.$.popup.style.left = 0;
           this.$.popup.style.right = 'inherit';
         }
 
-        setTimeout(() => {
-          pw = this.$.popup.offsetWidth;
-          var l = bw - 36;
-          var max = pw - 50;
-          if( l > max ) l = max;
+        var l = bw - 36;
+        var max = pw - 50;
+        if( l > max ) l = max;
 
-          this.$.triangle.style.left = l+'px';
-        }, 0);
+        this.$.triangle.style.left = l+'px';
+
+        if( !noRetry ) return;
+        setTimeout(() => this._resetTriangle(true), 0);
       }
     }
 
