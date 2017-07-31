@@ -169,10 +169,14 @@
         var offset = this.$.btn.getBoundingClientRect();
         var bl = offset.left;
         var bw = offset.width;
+        var pw = this.$.popup.offsetWidth;
 
         if( ww <= 768 ) {
           this.$.popup.style.left = (-1 * bl) + 'px';
           this.$.popup.style.right = (-1 * (ww - bl - bw)) + 'px';
+        } else if( bl + pw > ww + 20 ) {
+          this.$.popup.style.left = (bl + bw - ww - 20)+'px';
+          this.$.popup.style.right = 'inherit';
         } else {
           this.$.popup.style.left = 0;
           this.$.popup.style.right = 'inherit';
