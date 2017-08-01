@@ -153,6 +153,10 @@
         window.dispatchEvent(new CustomEvent('click', payload));
       }
 
+      focus() {
+        this.$.btn.focus();
+      }
+
       hide(e) {
         if( e && e.detail && e.detail.src === this ) {
           return;
