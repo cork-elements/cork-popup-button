@@ -50,7 +50,8 @@
         top: 10px;
         left: 0;
         width: var(--cork-popup-width);
-        min-width: 290px;
+        min-width: var(--cork-popup-min-width, 'initial');
+        /* min-width: 290px; */
       }
 
       #btnLabel {
@@ -179,9 +180,9 @@
         if( ww <= 768 ) {
           this.$.popup.style.left = (-1 * bl) + 'px';
           this.$.popup.style.right = (-1 * (ww - bl - bw)) + 'px';
-        } else if( bl + pw > ww + 35 ) {
-          this.$.popup.style.left = (bl + bw - ww - 35)+'px';
-          this.$.popup.style.right = 'inherit';
+        } else if( bl + pw > ww + 20 ) {
+          this.$.popup.style.left = 'inherit';
+          this.$.popup.style.right = 0;
         } else {
           this.$.popup.style.left = 0;
           this.$.popup.style.right = 'inherit';
