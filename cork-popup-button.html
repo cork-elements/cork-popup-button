@@ -72,7 +72,8 @@
     <button id="btn" on-click="_onClick" open$="[[open]]">
       <iron-icon hidden$="[[!icon]]" icon="[[icon]]"></iron-icon>
       <span id="btnLabel">[[label]]</span>
-      <iron-icon icon="arrow-drop-down"></iron-icon>
+      <span><slot name="btn-content"></slot></span>
+      <iron-icon icon="arrow-drop-down" hidden$="[[noBtnArrow]]"></iron-icon>
     </button>
 
     <div id="anchor" hidden$="[[!open]]" on-click="_prevent">
@@ -109,6 +110,10 @@
             type: Boolean,
             value: false,
             notify: true
+          },
+          noBtnArrow : {
+            type : Boolean,
+            value : false
           }
         };
       }
