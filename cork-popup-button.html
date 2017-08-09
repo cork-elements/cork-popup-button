@@ -119,6 +119,11 @@
           noBtnArrow : {
             type : Boolean,
             value : false
+          },
+          tabindex : {
+            type : Number,
+            value : 1,
+            reflectToAttribute : true
           }
         };
       }
@@ -127,7 +132,9 @@
         super();
         this.hide = this.hide.bind(this);
         this._resetTriangle = this._resetTriangle.bind(this);
-        
+
+        this.addEventListener('click', this._onClick.bind(this));
+        this.addEventListener('keydown', this._onKeyDown.bind(this));
       }
 
       connectedCallback() {
@@ -145,6 +152,11 @@
       toggle() {
         this.open = !this.open;
         this._resetTriangle();
+      }
+
+      _onKeyDown(e) {
+        if( e.which !== 13 ) return;
+        this._onClick(e);
       }
 
       _onClick(e) {
