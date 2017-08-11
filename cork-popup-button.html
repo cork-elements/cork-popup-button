@@ -74,14 +74,14 @@
       }
     </style>
 
-    <button id="btn" on-click="_onClick" open$="[[open]]">
+    <button id="btn" tabindex="-1" on-mousedown="_onClick" on-touchstart="_onClick" open$="[[open]]">
       <iron-icon hidden$="[[!icon]]" icon="[[icon]]"></iron-icon>
       <span id="btnLabel">[[label]]</span>
       <span><slot name="btn-content"></slot></span>
       <iron-icon icon="arrow-drop-down" hidden$="[[noBtnArrow]]"></iron-icon>
     </button>
 
-    <div id="anchor" hidden$="[[!open]]" on-click="_prevent">
+    <div id="anchor" hidden$="[[!open]]" on-mousedown="_prevent" on-touchstart="_onClick">
       <iron-icon icon="cork:up-arrow" id="triangle"></iron-icon>
       <div id="popup">
         <slot></slot>
@@ -133,29 +133,30 @@
         this.hide = this.hide.bind(this);
         this._resetTriangle = this._resetTriangle.bind(this);
 
-        this.addEventListener('click', this._onClick.bind(this));
-        this.addEventListener('keydown', this._onKeyDown.bind(this));
+        this.addEventListener('keyup', this._onKeyUp.bind(this));
       }
 
       connectedCallback() {
         super.connectedCallback();
         this.updateStyles();
-        window.addEventListener('click', this.hide);
+        window.addEventListener('mousedown', this.hide);
+        window.addEventListener('touchstart', this.hide);
         window.addEventListener('resize', this._resetTriangle);
       }
 
       disconnectedCallback() {
         super.disconnectedCallback();
-        window.removeEventListener('click', this.hide);
+        window.removeEventListener('mousedown', this.hide);
+        window.removeEventListener('touchstart', this.hide);
         window.removeEventListener('resize', this._resetTriangle);
       }
 
-      toggle() {
+      toggle() {        
         this.open = !this.open;
         this._resetTriangle();
       }
 
-      _onKeyDown(e) {
+      _onKeyUp(e) {
         if( e.which !== 13 ) return;
         this._onClick(e);
       }
@@ -168,13 +169,6 @@
       _prevent(e) {
         e.preventDefault();
         e.stopPropagation();
-
-        var payload = {
-          detail: {
-            src: this
-          }
-        }
-        window.dispatchEvent(new CustomEvent('click', payload));
       }
 
       focus() {
@@ -182,10 +176,6 @@
       }
 
       hide(e) {
-        if( e && e.detail && e.detail.src === this ) {
-          return;
-        }
-
         this.open = false;
       }
 
