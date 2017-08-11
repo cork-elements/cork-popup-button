@@ -139,6 +139,7 @@
 
       connectedCallback() {
         super.connectedCallback();
+        this.updateStyles();
         window.addEventListener('click', this.hide);
         window.addEventListener('resize', this._resetTriangle);
       }
@@ -203,11 +204,11 @@
           this.$.popup.style.left = (-1 * bl) + 'px';
           this.$.popup.style.right = (-1 * (ww - bl - bw)) + 'px';
         } else if( bl + pw > ww + 20 ) {
-          this.$.popup.style.left = 'inherit';
+          this.$.popup.style.left = 'auto';
           this.$.popup.style.right = 0;
         } else {
           this.$.popup.style.left = 0;
-          this.$.popup.style.right = 'inherit';
+          this.$.popup.style.right = 'auto';
         }
 
         var l = bw - 36;
