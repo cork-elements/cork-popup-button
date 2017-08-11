@@ -81,7 +81,7 @@
       <iron-icon icon="arrow-drop-down" hidden$="[[noBtnArrow]]"></iron-icon>
     </button>
 
-    <div id="anchor" hidden$="[[!open]]" on-mousedown="_prevent" on-touchstart="_onClick">
+    <div id="anchor" hidden$="[[!open]]" on-mousedown="_prevent" on-touchstart="_prevent">
       <iron-icon icon="cork:up-arrow" id="triangle"></iron-icon>
       <div id="popup">
         <slot></slot>
@@ -151,7 +151,7 @@
         window.removeEventListener('resize', this._resetTriangle);
       }
 
-      toggle() {        
+      toggle() {      
         this.open = !this.open;
         this._resetTriangle();
       }
