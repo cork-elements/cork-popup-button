@@ -11,20 +11,25 @@
         display: inline-block;
       }
 
-      button {
+      a {
+        display: block;
+        text-decoration: none;
         cursor: pointer;
         font-size: var(--cork-font-size, 16px);
-        width: 100%;
         text-align: left;
         border-radius: 0;
         background: var(--cork-background-color, var(--default-background-color, transparent));
         color: var(--cork-color, var(--default-text-color,  black));
         border: var(--cork-border, 1px solid #AFA6A1);
-        display: flex;
-        align-items: center;
         padding: 4px 5px 5px 5px;
       }
-      button[open] {
+
+      a > div {
+        display: flex;
+        align-items: center;
+      }
+
+      a[open] {
         background: var(--cork-background-color-open, #eee);
         color: var(--cork-color-open, #912046);
       }
@@ -74,14 +79,16 @@
       }
     </style>
 
-    <button id="btn" tabindex="-1" on-mousedown="_onClick" on-touchstart="_onClick" open$="[[open]]">
-      <iron-icon hidden$="[[!icon]]" icon="[[icon]]"></iron-icon>
-      <span id="btnLabel">[[label]]</span>
-      <span><slot name="btn-content"></slot></span>
-      <iron-icon icon="arrow-drop-down" hidden$="[[noBtnArrow]]"></iron-icon>
-    </button>
+    <a id="btn" tabindex="-1" on-click="_onClick"  open$="[[open]]">
+      <div>
+        <iron-icon hidden$="[[!icon]]" icon="[[icon]]"></iron-icon>
+        <span id="btnLabel">[[label]]</span>
+        <span><slot name="btn-content"></slot></span>
+        <iron-icon icon="arrow-drop-down" hidden$="[[noBtnArrow]]"></iron-icon>
+      </div>
+    </a>
 
-    <div id="anchor" hidden$="[[!open]]" on-mousedown="_prevent" on-touchstart="_prevent">
+    <div id="anchor" hidden$="[[!open]]" on-click="_prevent" >
       <iron-icon icon="cork:up-arrow" id="triangle"></iron-icon>
       <div id="popup">
         <slot></slot>
@@ -139,15 +146,13 @@
       connectedCallback() {
         super.connectedCallback();
         this.updateStyles();
-        window.addEventListener('mousedown', this.hide);
-        window.addEventListener('touchstart', this.hide);
+        window.addEventListener('click', this.hide);
         window.addEventListener('resize', this._resetTriangle);
       }
 
       disconnectedCallback() {
         super.disconnectedCallback();
-        window.removeEventListener('mousedown', this.hide);
-        window.removeEventListener('touchstart', this.hide);
+        window.removeEventListener('click', this.hide);
         window.removeEventListener('resize', this._resetTriangle);
       }
 
@@ -167,15 +172,33 @@
       }
 
       _prevent(e) {
+        // stop original event
         e.preventDefault();
         e.stopPropagation();
+
+        // send new click event, tagging this element as src
+        var event = new CustomEvent('click', {
+          bubbles : true, 
+          composed : true,
+          detail : {
+            corkSrc : this
+          } 
+        });
+        window.dispatchEvent(event);
       }
 
       focus() {
         this.$.btn.focus();
       }
 
+      unfocus() {
+        this.$.btn.unfocus();
+      }
+
       hide(e) {
+        if( e && e.detail && e.detail.corkSrc === this ) {
+          return;
+        }
         this.open = false;
       }
 
