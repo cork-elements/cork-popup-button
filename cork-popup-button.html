@@ -1,240 +1,89 @@
-<link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="../iron-icon/iron-icon.html">
-<link rel="import" href="../iron-icons/iron-icons.html">
-<link rel="import" href="../cork-icons/cork-icons.html">
+<style include="input-font-styles"></style>
+<style>
+  :host {
+    display: inline-block;
+  }
 
-<dom-module id="cork-popup-button">
-  <template>
-    <style include="input-font-styles"></style>
-    <style>
-      :host {
-        display: inline-block;
-      }
+  a {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: var(--cork-font-size, 16px);
+    text-align: left;
+    border-radius: 0;
+    background: var(--cork-background-color, var(--default-background-color, transparent));
+    color: var(--cork-color, var(--default-text-color,  black));
+    border: var(--cork-border, 1px solid #AFA6A1);
+    padding: 4px 5px 5px 5px;
+  }
 
-      a {
-        display: block;
-        text-decoration: none;
-        cursor: pointer;
-        font-size: var(--cork-font-size, 16px);
-        text-align: left;
-        border-radius: 0;
-        background: var(--cork-background-color, var(--default-background-color, transparent));
-        color: var(--cork-color, var(--default-text-color,  black));
-        border: var(--cork-border, 1px solid #AFA6A1);
-        padding: 4px 5px 5px 5px;
-      }
+  a > div {
+    display: flex;
+    align-items: center;
+  }
 
-      a > div {
-        display: flex;
-        align-items: center;
-      }
+  a[open] {
+    background: var(--cork-background-color-open, #eee);
+    color: var(--cork-color-open, #912046);
+  }
 
-      a[open] {
-        background: var(--cork-background-color-open, #eee);
-        color: var(--cork-color-open, #912046);
-      }
+  #anchor {
+    position: relative;
+  }
 
-      #anchor {
-        position: relative;
-      }
+  #triangle {
+    z-index: 1001;
+    position: absolute;
+    left: 5px;
+    top: -21px;
 
-      #triangle {
-        z-index: 1001;
-        position: absolute;
-        left: 5px;
-        top: -21px;
+    --iron-icon-height: 32px;
+    --iron-icon-width: 32px;
+  }
 
-        --iron-icon-height: 32px;
-        --iron-icon-width: 32px;
-      }
+  #popup {
+    z-index: 1000;
+    background-color: var(--cork-popup-background-color, var(--primary-background-color, #fff));
+    box-shadow: 0 0 8px #666;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: var(--cork-popup-width);
+    min-width: var(--cork-popup-min-width, 'initial');
+    margin-bottom: 20px;
+  }
 
-      #popup {
-        z-index: 1000;
-        background-color: var(--cork-popup-background-color, var(--primary-background-color, #fff));
-        box-shadow: 0 0 8px #666;
-        position: absolute;
-        top: 10px;
-        left: 0;
-        width: var(--cork-popup-width);
-        min-width: var(--cork-popup-min-width, 'initial');
-        margin-bottom: 20px;
-      }
+  #btnLabel {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 
-      #btnLabel {
-        flex: 1;
-        overflow: hidden;
-        white-space: nowrap;
-      }
+  iron-icon {
+    margin-right: 5px;
+  }
 
-      iron-icon {
-        margin-right: 5px;
-      }
+  iron-icon[icon="arrow-drop-down"] {
+    color: var(--cork-drop-down-arrow-color, #912046);
+  }
 
-      iron-icon[icon="arrow-drop-down"] {
-        color: var(--cork-drop-down-arrow-color, #912046);
-      }
+  [hidden] {
+    display: none;
+  }
+</style>
 
-      [hidden] {
-        display: none;
-      }
-    </style>
+<a id="btn" tabindex="-1" on-click="_onClick"  open$="[[open]]">
+  <div>
+    <iron-icon hidden$="[[!icon]]" icon="[[icon]]"></iron-icon>
+    <span id="btnLabel">[[label]]</span>
+    <span><slot name="btn-content"></slot></span>
+    <iron-icon icon="arrow-drop-down" hidden$="[[noBtnArrow]]"></iron-icon>
+  </div>
+</a>
 
-    <a id="btn" tabindex="-1" on-click="_onClick"  open$="[[open]]">
-      <div>
-        <iron-icon hidden$="[[!icon]]" icon="[[icon]]"></iron-icon>
-        <span id="btnLabel">[[label]]</span>
-        <span><slot name="btn-content"></slot></span>
-        <iron-icon icon="arrow-drop-down" hidden$="[[noBtnArrow]]"></iron-icon>
-      </div>
-    </a>
-
-    <div id="anchor" hidden$="[[!open]]" on-click="_prevent" >
-      <iron-icon icon="cork:up-arrow" id="triangle"></iron-icon>
-      <div id="popup">
-        <slot></slot>
-      </div>
-    </div>
-
-  </template>
-
-  <script>
-    /**
-     * `cork-popup-button`
-     * Select button with generic popup that can be a menu or something more complex
-     *
-     * @customElement
-     * @polymer
-     * @demo demo/index.html
-     */
-    class CorkPopupButton extends Polymer.Element {
-      static get is() { return 'cork-popup-button'; }
-      static get properties() {
-        return {
-          label: {
-            type: String,
-            value: ''
-          },
-          icon: {
-            type : String,
-            value : ''
-          },
-          open: {
-            type: Boolean,
-            value: false,
-            notify: true
-          },
-          noBtnArrow : {
-            type : Boolean,
-            value : false
-          },
-          tabindex : {
-            type : Number,
-            value : 1,
-            reflectToAttribute : true
-          }
-        };
-      }
-
-      constructor() {
-        super();
-        this.hide = this.hide.bind(this);
-        this._resetTriangle = this._resetTriangle.bind(this);
-
-        this.addEventListener('keyup', this._onKeyUp.bind(this));
-      }
-
-      connectedCallback() {
-        super.connectedCallback();
-        this.updateStyles();
-        window.addEventListener('click', this.hide);
-        window.addEventListener('resize', this._resetTriangle);
-      }
-
-      disconnectedCallback() {
-        super.disconnectedCallback();
-        window.removeEventListener('click', this.hide);
-        window.removeEventListener('resize', this._resetTriangle);
-      }
-
-      toggle() {      
-        this.open = !this.open;
-        this._resetTriangle();
-      }
-
-      _onKeyUp(e) {
-        if( e.which !== 13 ) return;
-        this._onClick(e);
-      }
-
-      _onClick(e) {
-        this._prevent(e);
-        this.toggle();
-      }
-
-      _prevent(e) {
-        // stop original event
-        e.preventDefault();
-        e.stopPropagation();
-
-        // send new click event, tagging this element as src
-        var event = new CustomEvent('click', {
-          bubbles : true, 
-          composed : true,
-          detail : {
-            corkSrc : this
-          } 
-        });
-        window.dispatchEvent(event);
-      }
-
-      focus() {
-        this.$.btn.focus();
-      }
-
-      unfocus() {
-        this.$.btn.unfocus();
-      }
-
-      hide(e) {
-        if( e && e.detail && e.detail.corkSrc === this ) {
-          return;
-        }
-        this.open = false;
-      }
-
-      _resetTriangle(noRetry) {
-        if( !this.open ) return;
-
-        var ww = window.innerWidth;
-        var pw = this.$.popup.offsetWidth;
-
-        var offset = this.$.btn.getBoundingClientRect();
-        var bl = offset.left;
-        var bw = offset.width;
-        var pw = this.$.popup.offsetWidth;
-
-        if( ww <= 768 ) {
-          this.$.popup.style.left = (-1 * bl) + 'px';
-          this.$.popup.style.right = (-1 * (ww - bl - bw)) + 'px';
-        } else if( bl + pw > ww + 20 ) {
-          this.$.popup.style.left = 'auto';
-          this.$.popup.style.right = 0;
-        } else {
-          this.$.popup.style.left = 0;
-          this.$.popup.style.right = 'auto';
-        }
-
-        var l = bw - 36;
-        var max = pw - 40;
-        if( l > max ) l = max;
-
-        this.$.triangle.style.left = l+'px';
-
-        if( !noRetry ) return;
-        setTimeout(() => this._resetTriangle(true), 0);
-      }
-    }
-
-    window.customElements.define(CorkPopupButton.is, CorkPopupButton);
-  </script>
-</dom-module>
+<div id="anchor" hidden$="[[!open]]" on-click="_prevent" >
+  <iron-icon icon="cork:up-arrow" id="triangle"></iron-icon>
+  <div id="popup">
+    <slot></slot>
+  </div>
+</div>

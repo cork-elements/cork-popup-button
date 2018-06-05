@@ -1,0 +1,25 @@
+{
+  "name": "@ucd-lib/cork-popup-button",
+  "version": "1.0.0",
+  "description": "Select button with generic popup that can be a menu or something more complex",
+  "main": "cork-popup-button.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cork-elements/cork-popup-button.git"
+  },
+  "author": "jrmerz@ucdavis.edu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cork-elements/cork-popup-button/issues"
+  },
+  "homepage": "https://github.com/cork-elements/cork-popup-button#readme",
+  "dependencies": {
+    "@polymer/iron-icon": "^3.0.0-pre.19",
+    "@polymer/iron-icons": "^3.0.0-pre.19",
+    "@polymer/polymer": "^3.0.2",
+    "@ucd-lib/cork-icons": "^1.0.0"
+  }
+}
