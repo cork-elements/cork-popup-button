@@ -1,6 +1,6 @@
 
 import {PolymerElement, html} from "@polymer/polymer"
-import template from "cork-popup-button.html"
+import template from "./cork-popup-button.html"
 
 import "@polymer/iron-icons"
 import "@polymer/iron-icon"

@@ -1,6 +1,6 @@
 {
   "name": "@ucd-lib/cork-popup-button",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Select button with generic popup that can be a menu or something more complex",
   "main": "cork-popup-button.js",
   "scripts": {
@@ -20,6 +20,6 @@
     "@polymer/iron-icon": "^3.0.0-pre.19",
     "@polymer/iron-icons": "^3.0.0-pre.19",
     "@polymer/polymer": "^3.0.2",
-    "@ucd-lib/cork-icons": "^1.0.0"
+    "@ucd-lib/cork-icons": "^1.0.1"
   }
 }
